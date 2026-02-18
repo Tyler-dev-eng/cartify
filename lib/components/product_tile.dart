@@ -27,7 +27,7 @@ class ProductTile extends ConsumerWidget {
 
               // add item to cart using Riverpod
               ref.read(shopProvider.notifier).addItemToCart(product);
-              
+
               // show success message
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
@@ -45,20 +45,23 @@ class ProductTile extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return Container(
-      decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.primary,
-        borderRadius: BorderRadius.circular(12),
-      ),
-      margin: EdgeInsets.all(10),
-      padding: EdgeInsets.all(25),
-      width: 300,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
+    return Align(
+      alignment: Alignment.topCenter,
+      child: Container(
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.primary,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        margin: EdgeInsets.all(10),
+        padding: EdgeInsets.all(25),
+        width: 300,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          mainAxisSize: MainAxisSize.min,
+          children: [
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
             children: [
               // product image
               AspectRatio(
@@ -70,7 +73,9 @@ class ProductTile extends ConsumerWidget {
                   ),
                   width: double.infinity,
                   padding: EdgeInsets.all(25),
-                  child: Icon(Icons.favorite),
+                  child: product.imagePath.isNotEmpty
+                      ? Image.asset(product.imagePath)
+                      : Icon(Icons.favorite),
                 ),
               ),
 
@@ -117,6 +122,7 @@ class ProductTile extends ConsumerWidget {
             ],
           ),
         ],
+        ),
       ),
     );
   }

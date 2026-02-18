@@ -43,19 +43,14 @@ class ShopPage extends ConsumerWidget {
           ),
 
           // product list
-          SizedBox(
-            height: 550,
-            child: ListView.builder(
-              padding: EdgeInsets.all(15),
-              itemCount: shop.shopProducts.length,
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (context, index) {
-                // get each product from the shop
-                final product = shop.shopProducts[index];
-
-                // return as a product tile
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            padding: EdgeInsets.all(15),
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: shop.shopProducts.map((product) {
                 return ProductTile(product: product);
-              },
+              }).toList(),
             ),
           ),
         ],
