@@ -1,11 +1,25 @@
 import 'package:cartify/components/my_drawer.dart';
+import 'package:cartify/components/product_tile.dart';
+import 'package:cartify/providers/shop_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ShopPage extends StatelessWidget {
+/// STEP 3: Convert StatelessWidget to ConsumerWidget
+/// ConsumerWidget allows us to access providers using 'ref'
+///
+/// What this does:
+/// - ConsumerWidget extends StatelessWidget but adds 'ref' parameter
+/// - ref.watch(shopProvider) reads the Shop instance from the provider
+/// - ref.watch() also rebuilds the widget when the provider changes
+/// - The Shop instance is now available to use in the widget
+
+class ShopPage extends ConsumerWidget {
   const ShopPage({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final shop = ref.watch(shopProvider); // Read the Shop from the provider
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.transparent,
@@ -13,8 +27,39 @@ class ShopPage extends StatelessWidget {
         foregroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text('Shop Page'),
       ),
-      backgroundColor: Theme.of(context).colorScheme.surface,
       drawer: MyDrawer(),
+      backgroundColor: Theme.of(context).colorScheme.surface,
+      body: ListView(
+        children: [
+          const SizedBox(height: 25),
+          // shop subtitle
+          Center(
+            child: Text(
+              "Select from our wide range of products",
+              style: TextStyle(
+                color: Theme.of(context).colorScheme.inversePrimary,
+              ),
+            ),
+          ),
+
+          // product list
+          SizedBox(
+            height: 550,
+            child: ListView.builder(
+              padding: EdgeInsets.all(15),
+              itemCount: shop.shopProducts.length,
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (context, index) {
+                // get each product from the shop
+                final product = shop.shopProducts[index];
+
+                // return as a product tile
+                return ProductTile(product: product);
+              },
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
