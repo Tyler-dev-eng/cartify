@@ -42,7 +42,7 @@ class Shop {
   ];
 
   // user cart
-  final List<Product> _userCart = [];
+  List<Product> _userCart = [];
 
   //get product list
   List<Product> get shopProducts => _shopProducts;
@@ -58,5 +58,12 @@ class Shop {
   // remove item from cart
   void removeItemFromCart(Product product) {
     _userCart.remove(product);
+  }
+
+  // create a copy of Shop with updated cart
+  Shop copyWith({List<Product>? userCart}) {
+    final shop = Shop();
+    shop._userCart = userCart ?? List.from(_userCart);
+    return shop;
   }
 }

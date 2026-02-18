@@ -1,12 +1,14 @@
 import 'package:cartify/model/product.dart';
+import 'package:cartify/providers/shop_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ProductTile extends StatelessWidget {
+class ProductTile extends ConsumerWidget {
   final Product product;
 
   const ProductTile({super.key, required this.product});
 
-  void addToCart(BuildContext context) {
+  void addToCart(BuildContext context, WidgetRef ref) {
     // show dialog to confirm addition
     showDialog(
       context: context,
@@ -23,7 +25,16 @@ class ProductTile extends StatelessWidget {
               // pop dialog box
               Navigator.pop(context);
 
-              // add item to cart
+              // add item to cart using Riverpod
+              ref.read(shopProvider.notifier).addItemToCart(product);
+              
+              // show success message
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('${product.name} added to cart!'),
+                  duration: Duration(seconds: 2),
+                ),
+              );
             },
             child: Text('Add'),
           ),
@@ -33,7 +44,7 @@ class ProductTile extends StatelessWidget {
   }
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Container(
       decoration: BoxDecoration(
         color: Theme.of(context).colorScheme.primary,
@@ -99,7 +110,7 @@ class ProductTile extends StatelessWidget {
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: IconButton(
-                  onPressed: () => addToCart(context),
+                  onPressed: () => addToCart(context, ref),
                   icon: Icon(Icons.add),
                 ),
               ),
